@@ -19,7 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 
 	UserService userService;
-
+	
+	
 	@PostMapping("/save")
 	public String saveUser(@RequestBody User user) {
 		log.info("inside saveUser");
