@@ -24,9 +24,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String updateUser(User user) {
-
-		return null;
+	public String updateUser(User user) throws UserNotFoundException {
+		User user1 = getUserById(user.getUserId());
+		user1.setFirstName(user.getFirstName());
+		user1.setLastName(user.getLastName());
+		user1.setDob(user.getDob());
+		user1.setEmail(user.getEmail());
+		user1.setPhoneNumber(user.getPhoneNumber());
+		
+		userRepository.save(user1);
+		return "User Information Updated";
 	}
 
 	@Override
@@ -36,8 +43,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Optional<User> getUserById(String UserId) {
-		return userRepository.findById(UserId);
+	public User getUserById(String UserId) throws UserNotFoundException{
+		return userRepository.findById(UserId).orElseThrow(()->new UserNotFoundException("User not found"));
 	}
 
 	@Override

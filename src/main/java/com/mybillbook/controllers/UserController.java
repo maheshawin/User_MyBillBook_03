@@ -1,6 +1,8 @@
 package com.mybillbook.controllers;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,15 +11,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mybillbook.entities.User;
+import com.mybillbook.exceptions.UserNotFoundException;
 import com.mybillbook.services.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @Slf4j
+@Tag(name ="User Management Service", description = "User Info")
 public class UserController {
-
+	
+	@Autowired
 	UserService userService;
 	
 	
@@ -33,16 +39,16 @@ public class UserController {
 		return userService.deleteUser(userId);
 	}
 
-	@PostMapping("/save")
-	public String updateUser(@RequestBody User user) {
+	@PostMapping("/update")
+	public String updateUser(@RequestBody User user) throws UserNotFoundException{
 		log.info("inside updateUser");
 		return userService.updateUser(user);
 	}
 
 	@GetMapping("/{id}")
-	public User getUserByUserId(@PathVariable("id") String userId) {
+	public User getUserByUserId(@PathVariable("id") String userId) throws UserNotFoundException {
 		log.info("inside getUserByUserId" + userId);
-		return userService.getUserById(userId).get();
+		return userService.getUserById(userId);
 	}
 
 	@GetMapping("/findall")
